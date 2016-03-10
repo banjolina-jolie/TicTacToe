@@ -2,55 +2,76 @@
 
 let Store = require('../stores/Store');
 let React = require('react/addons');
+let $ = require('jquery');
 
+let teams = ['✖', '○'];
 
-let getState = _ => {
-    return {
-
-    };
-}
 
 let AppBaseView = React.createClass({
-    getInitialState() {
-        return getState();
+    buildStateTable() {
+        var rows = [];
+        for (var row = 0; row < 3; row++) {
+            rows.push(this.buildRow(row));
+        }
+        return rows;
     },
-
-    componentDidMount() {
-    },
-
-    componentWillUnmount() {
-    },
-
-    buildRow() {
+    buildRow(row) {
         var cols = [];
-        for (var i = 0; i < 3; i++) {
-            cols.push(<div className="third">hi</div>);
+        for (var col = 0; col < 3; col++) {
+            cols.push({
+                val: '',
+                onClick: this.createClickHandler(row, col)
+            });
         }
         return cols;
     },
 
-    buildTable() {
-        var rows = [];
-
-        for (var i = 0; i < 3; i++) {
-            rows.push(
-                <div>
-                    <div className="table-row">
-                        { this.buildRow() }
-                    </div>
-                </div>
-            );
-        }
-
-        return rows;
+    getInitialState() {
+        return {
+            table: this.buildStateTable(),
+            turn: 0
+        };
     },
+
+    componentDidUpdate() {
+    },
+
 
     render() {
         return (
             <div>
-                { this.buildTable() }
+                {
+                    this.state.table.map(row => {
+                        return (
+                            <div className="table-row">
+                                {
+                                    row.map(square => {
+                                        return (
+                                            <div className="third" onClick={square.onClick}>{square.val}</div>
+                                        );
+                                    })
+                                }
+                            </div>
+                        );
+                    })
+                }
             </div>
         );
+    },
+
+    createClickHandler(row, col) {
+        return () => {
+            var table = this.state.table;
+            if (table[row][col].val) { return; } // can't play same square twice
+
+            var currentTeam = teams[this.state.turn];
+            table[row][col].val = currentTeam;
+
+            this.setState({
+                table: table,
+                turn: Number(!this.state.turn)
+            });
+        }
     }
 });
 
