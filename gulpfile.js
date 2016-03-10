@@ -60,6 +60,6 @@ gulp.task('watch', function () {
     gulp.watch(['./app/styles/**/*.scss'], ['sass']);
 });
 
-var defaultTasks = ['clean', 'browserify', 'sass', 'connect'];
+var defaultTasks = ['clean', 'browserify', 'sass', 'connect', 'watch'];
 
 gulp.task('default', defaultTasks);
