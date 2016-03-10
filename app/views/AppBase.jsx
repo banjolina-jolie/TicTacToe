@@ -1,6 +1,7 @@
 'use strict';
 
 let Store = require('../stores/Store');
+let checkForWinner = require('../utils').checkForWinner;
 let React = require('react/addons');
 let $ = require('jquery');
 
@@ -34,6 +35,11 @@ let AppBaseView = React.createClass({
     },
 
     componentDidUpdate() {
+        var table = this.state.table;
+        var winner = checkForWinner(table);
+        if (winner) {
+            alert(winner + ' wins');
+        }
     },
 
 
