@@ -34,15 +34,17 @@ let TicTacToeView = React.createClass({
             size: 3,
             table: this.buildStateTable(3),
             turn: 0,
+            turnsPlayed: 0,
             gameOver: false
         };
     },
 
     componentDidUpdate() {
+        let gameIsActive = !this.state.gameOver;
         let table = this.state.table;
         let winner = checkForWinner(table);
 
-        if (winner && !this.state.gameOver) {
+        if (gameIsActive && winner) {
             _.each(winner.indices, (arr) => {
                 table[arr[0]][arr[1]].green = true;
             });
@@ -50,7 +52,13 @@ let TicTacToeView = React.createClass({
                 gameOver: true,
                 table: table
             }, _ => {
-                alert(winner.symbol + ' wins');
+                return window.alert(winner.symbol + ' wins');
+            });
+        } else if (gameIsActive && this.state.turnsPlayed === Math.pow(this.state.size, 2)) {
+            this.setState({
+                gameOver: true,
+            }, _ => {
+                return window.alert('The game is a draw!');
             });
         }
     },
@@ -98,17 +106,15 @@ let TicTacToeView = React.createClass({
     resetGame() {
         this.setState({
             table: this.buildStateTable(this.state.size),
-            gameOver: false
+            gameOver: false,
+            turn: 0,
+            turnsPlayed: 0
         });
     },
 
     sizeChanged(e) {
         let size = e.target.value;
-        this.setState({
-            size,
-            table: this.buildStateTable(size),
-            gameOver: false
-        });
+        this.setState({ size }, this.resetGame);
     },
 
     createClickHandler(row, col) {
@@ -116,14 +122,15 @@ let TicTacToeView = React.createClass({
             let table = this.state.table;
             let sq = table[row][col];
 
-            if (sq.val || this.state.gameOver) { return; } // can't play same square twice
+            if (sq.val) { return; } // can't play same square twice
 
             sq.val = teams[this.state.turn].symbol;
             sq.symbolClass = teams[this.state.turn].symbolClass;
 
             this.setState({
                 table,
-                turn: Number(!this.state.turn)
+                turn: Number(!this.state.turn),
+                turnsPlayed: ++this.state.turnsPlayed
             });
         }
     }
