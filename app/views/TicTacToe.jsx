@@ -67,9 +67,11 @@ let TicTacToeView = React.createClass({
     render() {
         return (
             <div>
+                <h2>Tic-Tac-Toe</h2>
                 <div className="game-controls">
-                    <label>rows: </label>
-                    <input type="number" value={this.state.size} onChange={this.sizeChanged} />
+                    <label>size: </label>
+                    <input type="number" min="2" max="10" value={this.state.size} onChange={this.sizeChanged} />
+                    <span> (changing size will reset the game)</span>
                 </div>
                 <div className="game-controls">
                     <button onClick={this.resetGame}>Reset Game</button>
