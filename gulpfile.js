@@ -29,19 +29,11 @@ gulp.task('browserify', function () {
         var b = browserify(filename, {noParse: ['jquery']});
         return b.bundle();
     });
-    if (process.env.NODE_ENV !== 'production') {
-        // skip uglify in development
-        return gulp.src(['./app/main.js'])
-            .pipe(browserified)
-            .pipe(gulp.dest('./dist/js'))
-            .pipe(connect.reload());
-    } else {
-        return gulp.src(['./app/main.js'])
-            .pipe(browserified)
-            .pipe(uglify())
-            .pipe(gulp.dest('./dist/js'))
-            .pipe(connect.reload());
-    }
+    return gulp.src(['./app/main.js'])
+        .pipe(browserified)
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist/js'))
+        .pipe(connect.reload());
 });
 
 
