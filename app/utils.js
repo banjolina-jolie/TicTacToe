@@ -1,15 +1,13 @@
 'use strict';
 
-
-
 let _ = require('lodash');
 
 module.exports = {
     checkForWinner(table) {
         let funcs = [checkRows, checkCols, checkNegSlope, checkPosSlope];
 
-        for (var i = 0; i < funcs.length; i++) {
-            var winner = funcs[i](table);
+        for (let i = 0; i < funcs.length; i++) {
+            let winner = funcs[i](table);
             if (winner) {
                 return winner;
             }
@@ -19,15 +17,15 @@ module.exports = {
     }
 };
 
-var checkRows = function (table) {
-    var indices = [];
-    for (var i = 0; i < table.length; i++) {
-        var row = table[i];
-        var isWinningRow = _.every(row, function (sq) {
+let checkRows = (table) => {
+    let indices = [];
+    for (let i = 0; i < table.length; i++) {
+        let row = table[i];
+        let isWinningRow = _.every(row, (sq) => {
             return sq.val && sq.val === row[0].val;
         });
         if (isWinningRow) {
-            for (var k = 0; k < table.length; k++) {
+            for (let k = 0; k < table.length; k++) {
                 indices.push([i, k]);
             }
             return {
@@ -40,12 +38,12 @@ var checkRows = function (table) {
     return false;
 };
 
-var checkCols = function (table) {
-    var indices = [];
+let checkCols = (table) => {
+    let indices = [];
 
-    for (var i = 0; i < table.length; i++) {
-        var colIsWinner = true;
-        for (var j = 0; j < table[i].length; j++) {
+    for (let i = 0; i < table.length; i++) {
+        let colIsWinner = true;
+        for (let j = 0; j < table[i].length; j++) {
             if (!table[j][i].val || table[j][i].val !== table[0][i].val) {
                 colIsWinner = false;
             } else {
@@ -53,7 +51,7 @@ var checkCols = function (table) {
             }
         }
         if (colIsWinner) {
-            for (var k = 0; k < table.length; k++) {
+            for (let k = 0; k < table.length; k++) {
                 indices.push([k, i]);
             }
             return {
@@ -65,11 +63,11 @@ var checkCols = function (table) {
     return false;
 };
 
-var checkNegSlope = function (table) {
-    var winner = table[0][0].val;
-    var indices = [];
+let checkNegSlope = (table) => {
+    let winner = table[0][0].val;
+    let indices = [];
 
-    for (var i = 0; i < table.length; i++) {
+    for (let i = 0; i < table.length; i++) {
         indices.push([i, i]);
         if (!table[i][i].val || table[i][i].val !== winner) {
             winner = false;
@@ -88,24 +86,21 @@ var checkNegSlope = function (table) {
 
 };
 
-var checkPosSlope = function (table) {
-    var lastIdx = table.length - 1;
-    var winner = table[0][lastIdx].val;
-    var indices = [];
+let checkPosSlope = (table) => {
+    let lastIdx = table.length - 1;
+    let symbol = table[0][lastIdx].val;
+    let indices = [];
 
-    for (var i = 0; i < table.length; i++) {
+    for (let i = 0; i < table.length; i++) {
         indices.push([i, lastIdx-i]);
-        if (!table[i][lastIdx-i].val || table[i][lastIdx-i].val !== winner) {
-            winner = false;
+        if (!table[i][lastIdx-i].val || table[i][lastIdx-i].val !== symbol) {
+            symbol = false;
             break;
         }
     }
 
-    if (winner) {
-        return {
-            symbol: winner,
-            indices: indices
-        };
+    if (symbol) {
+        return { symbol, indices };
     } else {
         return false;
     }

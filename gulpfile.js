@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var connect = require('gulp-connect');
 var browserify = require('browserify');
 var transform = require('vinyl-transform');
-var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var clean = require('gulp-clean');
 var concat = require('gulp-concat');
@@ -31,7 +30,6 @@ gulp.task('browserify', function () {
     });
     return gulp.src(['./app/main.js'])
         .pipe(browserified)
-        .pipe(uglify())
         .pipe(gulp.dest('./dist/js'))
         .pipe(connect.reload());
 });

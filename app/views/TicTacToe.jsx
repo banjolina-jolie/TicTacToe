@@ -4,8 +4,8 @@ let checkForWinner = require('../utils').checkForWinner;
 let _ = require('lodash');
 
 let teams = [
-    {symbol: '✖', className:'x'},
-    {symbol: '○', className:'o'}
+    {symbol: '✖', symbolClass:'x'},
+    {symbol: '○', symbolClass:'o'}
 ];
 
 
@@ -59,16 +59,24 @@ let TicTacToeView = React.createClass({
     render() {
         return (
             <div>
-                <button onClick={this.resetGame}>Reset Game</button>
-                <input type="number" value={this.state.size} onChange={this.sizeChanged} />
+                <div className="game-controls">
+                    <label>rows: </label>
+                    <input type="number" value={this.state.size} onChange={this.sizeChanged} />
+                </div>
+                <div className="game-controls">
+                    <button onClick={this.resetGame}>Reset Game</button>
+                </div>
                 {
                     this.state.table.map(row => {
                         return (
                             <div className="table-row">
                                 {
                                     row.map(sq => {
-                                        let classes = 'third ';
-                                        classes += sq.className;
+                                        let classes = 'game-square ';
+
+                                        if (sq.symbolClass) {
+                                            classes += sq.symbolClass;
+                                        }
 
                                         if (sq.green) {
                                             classes += ' green';
@@ -97,8 +105,8 @@ let TicTacToeView = React.createClass({
     sizeChanged(e) {
         let size = e.target.value;
         this.setState({
+            size,
             table: this.buildStateTable(size),
-            size: size,
             gameOver: false
         });
     },
@@ -111,10 +119,10 @@ let TicTacToeView = React.createClass({
             if (sq.val || this.state.gameOver) { return; } // can't play same square twice
 
             sq.val = teams[this.state.turn].symbol;
-            sq.className = teams[this.state.turn].className;
+            sq.symbolClass = teams[this.state.turn].symbolClass;
 
             this.setState({
-                table: table,
+                table,
                 turn: Number(!this.state.turn)
             });
         }

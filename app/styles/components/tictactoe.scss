@@ -1,13 +1,16 @@
 .table-row {
     clear: both;
-    &:last-child {
-        .third {
-            border-bottom: none;
-        }
+
+    &:last-child .game-square {
+        border-bottom: none;
     }
 }
 
-.third {
+.game-controls {
+    margin-bottom: 20px;
+}
+
+.game-square {
     cursor: pointer;
     float: left;
     width: 100px;
@@ -16,6 +19,7 @@
     color: #999999;
     border-right: 10px solid black;
     border-bottom: 10px solid black;
+    overflow: hidden;
 
     &:hover {
         background-color: #efefef;
@@ -25,10 +29,10 @@
         border-right: none;
     }
 
-
     &.x {
         font-size: 100px;
         line-height: 111px;
+
         &:hover {
             background-color: #fff;
         }
@@ -37,6 +41,7 @@
     &.o {
         line-height: 100px;
         font-size: 177px;
+
         &:hover {
             background-color: #fff;
         }
